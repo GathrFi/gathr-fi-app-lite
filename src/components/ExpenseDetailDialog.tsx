@@ -4,6 +4,7 @@ import { Transaction } from "@mysten/sui/transactions";
 import { useNetworkVariable } from "../networkConfig";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
+import { UsdcBalance } from "./UsdcBalance";
 
 interface Expense {
   objectId: string;
@@ -307,6 +308,11 @@ export function ExpenseDetailDialog({
                           <Text size="2" color="gray" mb="2">
                             You owe {formatAmount(amountOwedRaw)} USDC for this expense
                           </Text>
+                          
+                          <Box mb="3" p="2" style={{ backgroundColor: "var(--gray-2)", borderRadius: "4px" }}>
+                            <UsdcBalance showRefreshButton={false} size="2" />
+                          </Box>
+                          
                           <Button
                             onClick={handleSettle}
                             disabled={isSettling}

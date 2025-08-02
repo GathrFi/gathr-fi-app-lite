@@ -4,6 +4,7 @@ import { WalletStatus } from "./WalletStatus";
 import { ExpensesList } from "./components/ExpensesList";
 import { AddExpense } from "./components/AddExpense";
 import { ContractTest } from "./components/ContractTest";
+import { UsdcBalance } from "./components/UsdcBalance";
 
 function App() {
   const currentAccount = useCurrentAccount();
@@ -15,17 +16,26 @@ function App() {
         px="4"
         py="2"
         justify="between"
+        align="center"
         style={{
           borderBottom: "1px solid var(--gray-a2)",
         }}
       >
-        <Box>
-          <Heading>GathrFi - Split Bills</Heading>
-        </Box>
+        <Flex align="center" gap="3">
+          <img 
+            src="https://raw.githubusercontent.com/GathrFi/gathr-fi-app/b50b8aded01ce15da16371b645585a52f3e2770b/assets/images/img-brand.svg"
+            alt="GathrFi Logo"
+            style={{ width: "32px", height: "32px" }}
+          />
+          <Heading>GathrFi</Heading>
+        </Flex>
 
-        <Box>
+        <Flex align="center" gap="4">
+          {currentAccount && (
+            <UsdcBalance showRefreshButton={true} size="3" />
+          )}
           <ConnectButton />
-        </Box>
+        </Flex>
       </Flex>
       <Container>
         <Container
