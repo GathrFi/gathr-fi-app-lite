@@ -15,10 +15,10 @@ const { networkConfig, useNetworkVariable, useNetworkVariables } =
       variables: {
         // === Main Contract
         gathrfi:
-          "0xad3ce58354518721aa95b3d99ba0fc430fd7ab618f5c38095835dfb5bb1201d4",
+          "0xb7e55a7aa4b0148903f85cb4b1d14a68f1865bb74b0e12ce35f3cf0128cd9570",
         // === Mock USDC for token used in the main contract
         mockUsdc:
-          "0xad3ce58354518721aa95b3d99ba0fc430fd7ab618f5c38095835dfb5bb1201d4::mock_usdc::MOCK_USDC",
+          "0xb7e55a7aa4b0148903f85cb4b1d14a68f1865bb74b0e12ce35f3cf0128cd9570::mock_usdc::MOCK_USDC",
       },
     },
     mainnet: {
