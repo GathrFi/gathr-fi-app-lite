@@ -71,6 +71,26 @@ export function ExpenseDetailDialog({
     return `${address.slice(0, 6)}...${address.slice(-4)}`;
   };
 
+  const convertBytesToString = (bytes: any): string => {
+    if (!bytes) return "No description";
+    
+    try {
+      // Handle different possible formats
+      if (typeof bytes === "string") return bytes;
+      if (Array.isArray(bytes)) {
+        // Convert array of numbers to string
+        return new TextDecoder().decode(new Uint8Array(bytes));
+      }
+      if (bytes.data && Array.isArray(bytes.data)) {
+        return new TextDecoder().decode(new Uint8Array(bytes.data));
+      }
+      return "No description";
+    } catch (error) {
+      console.error("Error converting bytes to string:", error);
+      return "Unable to decode description";
+    }
+  };
+
   const handleSettle = async () => {
     if (!currentAccount || !gathrfiContract || !mockUsdcType) return;
 
@@ -163,7 +183,9 @@ export function ExpenseDetailDialog({
           {/* Basic Expense Information */}
           <Box>
             <Text size="2" color="gray">Description</Text>
-            <Text size="3" weight="bold">{expense.description || "No description"}</Text>
+            <Text size="3" weight="bold">
+              {expenseDetails ? convertBytesToString(expenseDetails.description) : expense.description || "No description"}
+            </Text>
           </Box>
 
           <Box>
