@@ -76,11 +76,18 @@ export function ExpenseDetailDialog({
 
     setIsSettling(true);
     try {
+      console.log("Starting settlement process...");
+      console.log("Contract:", gathrfiContract);
+      console.log("Mock USDC Type:", mockUsdcType);
+      console.log("Expense ID:", expense.objectId);
+
       // First, get user's USDC coins
       const coins = await suiClient.getCoins({
         owner: currentAccount.address,
         coinType: mockUsdcType,
       });
+
+      console.log("User coins:", coins.data);
 
       if (coins.data.length === 0) {
         toast.error("No USDC coins found. Please get some USDC first.");
@@ -106,26 +113,32 @@ export function ExpenseDetailDialog({
         tx.mergeCoins(coinToUse, coinIds);
       }
 
-      // Call settle_expense function
-      tx.moveCall({
+      // Call settle_expense function - it returns the remaining coin
+      const [remainingCoin] = tx.moveCall({
         target: `${gathrfiContract}::gathrfi::settle_expense`,
         arguments: [
           tx.object(expense.objectId),
           tx.object(coinToUse),
         ],
-        typeArguments: [mockUsdcType],
+        // No type arguments needed since the function uses MOCK_USDC directly
       });
+
+      // Transfer the remaining coin back to the user
+      tx.transferObjects([remainingCoin], currentAccount.address);
+
+      console.log("Transaction created, executing...");
 
       signAndExecute(
         { transaction: tx },
         {
-          onSuccess: () => {
+          onSuccess: (result) => {
+            console.log("Settlement successful:", result);
             toast.success("Expense settled successfully!");
             onClose();
           },
           onError: (error) => {
             console.error("Settlement failed:", error);
-            toast.error("Failed to settle expense. Please try again.");
+            toast.error(`Failed to settle expense: ${error.message || error}`);
           },
         }
       );
